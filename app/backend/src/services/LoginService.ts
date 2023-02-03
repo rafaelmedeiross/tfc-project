@@ -1,5 +1,4 @@
 import User from '../database/models/User';
-// import * as bcrypt from 'bcryptjs';
 import { tokenCreation } from '../auth/jwt';
 import Login from '../interfaces/LoginInterface';
 

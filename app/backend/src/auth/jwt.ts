@@ -1,7 +1,7 @@
-import jwt = require('jsonwebtoken');
+import * as jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 
-const secret = 'mySecretSignature';
+const secret = process.env.JWT_SECRET || 'jwt_secret';
 const jwtConfig = {
   expiresIn: '7d',
   algorithm: 'HS256',
