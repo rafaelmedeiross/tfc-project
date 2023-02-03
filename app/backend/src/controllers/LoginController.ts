@@ -10,6 +10,13 @@ class LoginController {
     if (feedback.message) return res.status(401).json(feedback);
     res.status(200).json(feedback);
   };
+
+  public validateLogin = async (req: Request, res: Response) => {
+    const { email } = req.body.loggedUser;
+    const feedback = await this.loginService.validateLogin(email);
+    if (feedback.message) return res.status(401).json(feedback);
+    res.status(200).json(feedback);
+  };
 }
 
 export default LoginController;
