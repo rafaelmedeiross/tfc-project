@@ -1,26 +1,30 @@
+import * as bcrypt from 'bcryptjs';
 import User from '../database/models/User';
 import { tokenCreation } from '../auth/jwt';
-import Login from '../interfaces/LoginInterface';
+import ILogin from '../interfaces/ILogin';
+import IUser from '../interfaces/IUser';
 
 class LoginService {
   constructor(private userModel = User) {}
 
-  public async loginUser(login: Login): Promise< { token?: string, message?: string } > {
+  public async loginUser(login: ILogin): Promise<{ token?: string, message?: string }> {
     const userExists = await this.findUser(login);
-    console.log(userExists);
-    const { email } = login;
-    if (userExists) {
+    if (!userExists) {
+      return { message: 'Incorrect email or password' };
+    }
+    const { email, password } = login;
+    const { password: hashFromDb } = userExists;
+    if (bcrypt.compareSync(password, hashFromDb)) {
       const token = tokenCreation({ email });
       return { token };
     }
     return { message: 'Incorrect email or password' };
   }
 
-  private async findUser(login: Login) {
+  private async findUser(login: ILogin): Promise<IUser | null> {
     const { email } = login;
     const user = await this.userModel.findOne({ where: { email } });
-    if (user) return true;
-    return false;
+    return user;
   }
 }
 
