@@ -19,6 +19,13 @@ class MatchController {
     const feedback = await this.matchService.postMatch(match);
     res.status(201).json(feedback);
   };
+
+  public finishMatch = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const numberId = parseInt(id, 10);
+    const feedback = await this.matchService.finishMatch(numberId);
+    res.status(200).json(feedback);
+  };
 }
 
 export default MatchController;

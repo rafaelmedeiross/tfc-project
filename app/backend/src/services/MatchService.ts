@@ -36,5 +36,10 @@ class MatchService {
     const createdMatch = await this.matchModel.findByPk(id);
     return createdMatch;
   }
+
+  public async finishMatch(id: number): Promise<{ message: string } > {
+    await this.matchModel.update({ inProgress: false }, { where: { id } });
+    return { message: 'Finished' };
+  }
 }
 export default MatchService;
