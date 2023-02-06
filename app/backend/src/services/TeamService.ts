@@ -3,13 +3,13 @@ import Team from '../database/models/Team';
 class TeamService {
   constructor(private teamModel = Team) {}
 
-  public getAllTeams() {
-    const allTeams = this.teamModel.findAll();
+  public async getAllTeams() {
+    const allTeams = await this.teamModel.findAll();
     return allTeams;
   }
 
-  public getTeamById(id: string) {
-    const team = this.teamModel.findByPk(id);
+  public async getTeamById(id: string) {
+    const team = await this.teamModel.findByPk(id);
     return team;
   }
 }
