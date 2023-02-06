@@ -3,6 +3,12 @@ import IMatch from '../interfaces/IMatch';
 import Team from '../database/models/Team';
 
 class MatchService {
+  declare id: number;
+  declare homeTeamId: number;
+  declare homeTeamGoals: number;
+  declare awayTeamId: number;
+  declare awayTeamGoals: number;
+  declare inProgress: boolean;
   constructor(private matchModel = Match) {}
 
   public async getAllMatches(inProgress?: string): Promise<IMatch[]> {
@@ -16,6 +22,19 @@ class MatchService {
       ],
     });
     return allMatches;
+  }
+
+  public async postMatch({ homeTeamId, homeTeamGoals, awayTeamId, awayTeamGoals,
+  }: IMatch): Promise<IMatch | null> {
+    const { id } = await this.matchModel.create({
+      homeTeamId,
+      homeTeamGoals,
+      awayTeamId,
+      awayTeamGoals,
+      inProgress: true,
+    });
+    const createdMatch = await this.matchModel.findByPk(id);
+    return createdMatch;
   }
 }
 export default MatchService;

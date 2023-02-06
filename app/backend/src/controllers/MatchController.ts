@@ -13,6 +13,12 @@ class MatchController {
     const feedback = await this.matchService.getAllMatches();
     res.status(200).json(feedback);
   };
+
+  public postMatch = async (req: Request, res: Response) => {
+    const match = req.body;
+    const feedback = await this.matchService.postMatch(match);
+    res.status(201).json(feedback);
+  };
 }
 
 export default MatchController;
