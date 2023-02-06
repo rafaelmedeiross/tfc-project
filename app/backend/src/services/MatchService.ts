@@ -9,7 +9,10 @@ class MatchService {
   declare awayTeamId: number;
   declare awayTeamGoals: number;
   declare inProgress: boolean;
-  constructor(private matchModel = Match) {}
+  constructor(
+    private matchModel = Match,
+    private teamModel = Team,
+  ) {}
 
   public async getAllMatches(inProgress?: string): Promise<IMatch[]> {
     const inProgressStatus = inProgress === 'true';
@@ -24,8 +27,15 @@ class MatchService {
     return allMatches;
   }
 
-  public async postMatch({ homeTeamId, homeTeamGoals, awayTeamId, awayTeamGoals,
-  }: IMatch): Promise<IMatch | null> {
+  public async postMatch(
+    {
+      homeTeamId, homeTeamGoals, awayTeamId, awayTeamGoals,
+    }: IMatch,
+  ): Promise<{ message?: string, createdMatch?: IMatch }> {
+    const [homeTeam, awayTeam] = await Promise.all([homeTeamId, awayTeamId]
+      .map((id) => this.teamModel.findByPk(id)));
+    if (!homeTeam || !awayTeam) return { message: 'There is no team with such id!' };
+
     const { id } = await this.matchModel.create({
       homeTeamId,
       homeTeamGoals,
@@ -33,8 +43,10 @@ class MatchService {
       awayTeamGoals,
       inProgress: true,
     });
+
     const createdMatch = await this.matchModel.findByPk(id);
-    return createdMatch;
+    if (!createdMatch) return { message: 'There is no team with such id!' };
+    return { createdMatch };
   }
 
   public async finishMatch(id: number): Promise<{ message: string } > {

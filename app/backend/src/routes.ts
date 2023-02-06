@@ -3,6 +3,7 @@ import LoginController from './controllers/LoginController';
 import TeamController from './controllers/TeamController';
 import MatchController from './controllers/MatchController';
 import verifier from './middlewares/LoginMiddleware';
+import matchVerifier from './middlewares/MatchMiddleware';
 import { tokenValidation } from './auth/jwt';
 
 const loginController = new LoginController();
@@ -16,7 +17,7 @@ router.get('/login/validate', tokenValidation, loginController.validateLogin);
 router.get('/teams', teamController.getAllTeams);
 router.get('/teams/:id', teamController.getTeamById);
 router.get('/matches', matchController.getAllMatches);
-router.post('/matches', tokenValidation, matchController.postMatch);
+router.post('/matches', tokenValidation, matchVerifier, matchController.postMatch);
 router.patch('/matches/:id/finish', matchController.finishMatch);
 
 export default router;

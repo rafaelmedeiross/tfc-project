@@ -17,7 +17,9 @@ class MatchController {
   public postMatch = async (req: Request, res: Response) => {
     const match = req.body;
     const feedback = await this.matchService.postMatch(match);
-    res.status(201).json(feedback);
+    const { message, createdMatch } = feedback;
+    if (message) return res.status(404).json({ message });
+    res.status(201).json(createdMatch);
   };
 
   public finishMatch = async (req: Request, res: Response) => {
