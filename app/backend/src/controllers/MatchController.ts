@@ -28,6 +28,14 @@ class MatchController {
     const feedback = await this.matchService.finishMatch(numberId);
     res.status(200).json(feedback);
   };
+
+  public updateMatch = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { homeTeamGoals, awayTeamGoals } = req.body;
+    const numberId = parseInt(id, 10);
+    const feedback = await this.matchService.updateMatch(numberId, homeTeamGoals, awayTeamGoals);
+    res.status(200).json(feedback);
+  };
 }
 
 export default MatchController;

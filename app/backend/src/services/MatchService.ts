@@ -53,5 +53,15 @@ class MatchService {
     await this.matchModel.update({ inProgress: false }, { where: { id } });
     return { message: 'Finished' };
   }
+
+  public async updateMatch(
+    id: number,
+    homeTeamGoals: number,
+    awayTeamGoals: number,
+  ): Promise<{ message: string } > {
+    await this.matchModel.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
+    return { message: 'Scored updated sucessfully' };
+  }
 }
+
 export default MatchService;
