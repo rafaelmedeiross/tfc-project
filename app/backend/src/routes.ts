@@ -23,5 +23,6 @@ router.post('/matches', tokenValidation, matchVerifier, matchController.postMatc
 router.patch('/matches/:id/finish', matchController.finishMatch);
 router.patch('/matches/:id', matchController.updateMatch);
 router.get('/leaderboard/home', leaderboardController.getHomeLeaderboard);
+router.get('/leaderboard/away', leaderboardController.getAwayLeaderboard);
 
 export default router;

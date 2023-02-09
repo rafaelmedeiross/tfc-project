@@ -23,14 +23,14 @@ const calculateInitialValues = (team: ITeam): ITeamStats => ({
 const updateTeamStats = (stats: ITeamStats, thisMatch: IMatch): ITeamStats => {
   const teamStats = { ...stats };
   teamStats.totalGames += 1;
-  teamStats.goalsOwn += thisMatch.awayTeamGoals;
-  teamStats.goalsFavor += thisMatch.homeTeamGoals;
+  teamStats.goalsOwn += thisMatch.homeTeamGoals;
+  teamStats.goalsFavor += thisMatch.awayTeamGoals;
   teamStats.goalsBalance = teamStats.goalsFavor - teamStats.goalsOwn;
-  if (thisMatch.homeTeamGoals > thisMatch.awayTeamGoals) {
+  if (thisMatch.homeTeamGoals < thisMatch.awayTeamGoals) {
     teamStats.totalPoints += 3;
     teamStats.totalVictories += 1;
   }
-  if (thisMatch.homeTeamGoals < thisMatch.awayTeamGoals) teamStats.totalLosses += 1;
+  if (thisMatch.homeTeamGoals > thisMatch.awayTeamGoals) teamStats.totalLosses += 1;
   if (thisMatch.homeTeamGoals === thisMatch.awayTeamGoals) {
     teamStats.totalPoints += 1;
     teamStats.totalDraws += 1;
@@ -40,10 +40,10 @@ const updateTeamStats = (stats: ITeamStats, thisMatch: IMatch): ITeamStats => {
   return teamStats;
 };
 
-const teamStats = (team: ITeam, matches: IMatch[]): ITeamStats => matches
+const awayTeamStats = (team: ITeam, matches: IMatch[]): ITeamStats => matches
   .reduce(
     (acc, thisMatch: IMatch) => updateTeamStats(acc, thisMatch),
     calculateInitialValues(team),
   );
 
-export default teamStats;
+export default awayTeamStats;
