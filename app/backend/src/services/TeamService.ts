@@ -1,9 +1,10 @@
+import ITeam from '../interfaces/ITeam';
 import Team from '../database/models/Team';
 
 class TeamService {
   constructor(private teamModel = Team) {}
 
-  public async getAllTeams() {
+  public async getAllTeams(): Promise <ITeam[]> {
     const allTeams = await this.teamModel.findAll();
     return allTeams;
   }
