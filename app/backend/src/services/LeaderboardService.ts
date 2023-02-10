@@ -1,6 +1,6 @@
 import Team from '../database/models/Team';
 import Match from '../database/models/Match';
-import teamStats from './func/teamStats';
+import teamStats, { leaderboard } from './func/teamStats';
 import awayTeamStats from './func/awayTeamStats';
 import ILeaderboard from '../interfaces/ILeaderboard';
 
@@ -38,6 +38,22 @@ class LeaderboardService {
       if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
       if (b.goalsBalance !== a.goalsBalance) return b.goalsBalance - a.goalsBalance;
       if (b.goalsFavor !== a.goalsFavor) return b.goalsFavor - a.goalsFavor;
+      return 0;
+    });
+  }
+
+  public async getLeaderboard(): Promise<ILeaderboard[]> {
+    const homeLeaderboard = await this.getHomeLeaderboard();
+    const awayLeaderboard = await this.getAwayLeaderboard();
+
+    if (!Array.isArray(homeLeaderboard) || !Array.isArray(awayLeaderboard)) {
+      throw new Error('should return arrays');
+    }
+
+    return leaderboard(homeLeaderboard, awayLeaderboard).sort((a, c) => {
+      if (c.totalPoints !== a.totalPoints) return c.totalPoints - a.totalPoints;
+      if (c.goalsBalance !== a.goalsBalance) return c.goalsBalance - a.goalsBalance;
+      if (c.goalsFavor !== a.goalsFavor) return c.goalsFavor - a.goalsFavor;
       return 0;
     });
   }

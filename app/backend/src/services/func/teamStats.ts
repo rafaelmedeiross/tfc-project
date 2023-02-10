@@ -46,4 +46,27 @@ const teamStats = (team: ITeam, matches: IMatch[]): ITeamStats => matches
     calculateInitialValues(team),
   );
 
+export const leaderboard = (
+  homeLeaderboard: ITeamStats[],
+  awayLeaderboard: ITeamStats[],
+): ITeamStats[] => homeLeaderboard.map((hS) => {
+  const aS = awayLeaderboard.find((away) => away.name === hS.name);
+
+  if (!aS) return hS;
+
+  return {
+    name: hS.name,
+    totalPoints: hS.totalPoints + aS.totalPoints,
+    totalGames: hS.totalGames + aS.totalGames,
+    totalVictories: hS.totalVictories + aS.totalVictories,
+    totalLosses: hS.totalLosses + aS.totalLosses,
+    totalDraws: hS.totalDraws + aS.totalDraws,
+    goalsFavor: hS.goalsFavor + aS.goalsFavor,
+    goalsOwn: hS.goalsOwn + aS.goalsOwn,
+    goalsBalance: hS.goalsBalance + aS.goalsBalance,
+    efficiency: (((hS.totalVictories + aS.totalVictories) * 3
+      + (hS.totalDraws + aS.totalDraws)) / ((hS.totalGames + aS.totalGames) * 3)) * 100,
+  };
+});
+
 export default teamStats;
