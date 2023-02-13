@@ -24,7 +24,11 @@ describe('Login Test', () => {
     before(async () => {
       sinon
         .stub(User, 'findOne')
-        .resolves(login as User);
+        .resolves({
+          email: 'test@test.com',
+          password: bcrypt.hashSync('password', 10),
+          role: 'user'
+        } as User);
     });
   
     after(() => {
