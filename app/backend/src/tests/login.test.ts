@@ -1,6 +1,5 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
-import * as bcrypt from 'bcryptjs';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 
@@ -17,18 +16,14 @@ describe('Login Test', () => {
     let chaiHttpResponse: Response;
 
     const login = {
-      email: 'teste@teste.com',
+      email: 'test@trybe.com',
       password: 'password'
     };
   
     before(async () => {
       sinon
         .stub(User, 'findOne')
-        .resolves({
-          email: 'test@test.com',
-          password: bcrypt.hashSync('password', 10),
-          role: 'user'
-        } as User);
+        .resolves(login as User);
     });
   
     after(() => {
